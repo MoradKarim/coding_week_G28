@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # Python service
+  app:
+    container_name: medical_decision_support_app
+    image: python:3.9-slim
+    working_dir: /app
+    volumes:
+      - .:/app  # Mounts the current directory to /app in the container
+    ports:
+      - "8501:8501"  # Expose port 8501 for Streamlit
+    command: bash -c "pip install -r requirements.txt && streamlit run app/app.py"  # Install dependencies and run Streamlit app
+    environment:
+      - PYTHONUNBUFFERED=1  # Disable buffering to show logs in real-time
+
+  # Optional: Add a database service (e.g., PostgreSQL) if needed
+  # database:
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_USER: user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: medical_db
+  #   volumes:
+  #     - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+    driver: local
